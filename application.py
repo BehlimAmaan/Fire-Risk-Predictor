@@ -35,7 +35,6 @@ def result():
 
     prediction = ridge_model.predict(scaled_data)
 
-    # THIS renders the result page
     return render_template("result.html", prediction=prediction[0])
 
 if __name__ == "__main__":

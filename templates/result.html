@@ -67,7 +67,7 @@
             text-align: center;
             font-weight: bold;
             border-radius: 30px;
-            transition: width 1s ease;
+            transition: width 1s ease, background-color 0.5s ease;
         }
 
         .btn {
@@ -92,9 +92,9 @@
 
 <div class="box">
     <div class="icon">🔥</div>
-    <h1>Fire Prediction Result</h1>
+    <h1>The FWI Fire Prediction Result</h1>
 
-    <h2>{{ prediction }}%</h2>
+    <h2>{{ prediction }}</h2>
 
     <div class="progress-container">
         <div id="progressBar" class="progress-bar">0%</div>
@@ -108,18 +108,26 @@
 </div>
 
 <script>
-    const prediction = {{ prediction }}; // Pass numeric value from backend
+    const prediction = {{ prediction }}; 
     const progressBar = document.getElementById('progressBar');
 
-    // Set bar color based on prediction percentage
-    let color = '#2ecc71'; // green for low risk
-    if (prediction >= 70) color = '#e74c3c'; // red for high risk
-    else if (prediction >= 40) color = '#f1c40f'; // yellow for medium risk
+    let color = '#2ecc71'; 
+    let statusText = 'Low Risk';
+    if (prediction >= 80) { color = '#e74c3c'; statusText = 'Extreme Risk'; }
+    else if (prediction >= 60) { color = '#e67e22'; statusText = 'Very High Risk'; }
+    else if (prediction >= 40) { color = '#f1c40f'; statusText = 'High Risk'; }
+    else if (prediction >= 20) { color = '#27ae60'; statusText = 'Moderate Risk'; }
 
     progressBar.style.backgroundColor = color;
-    progressBar.style.width = prediction + '%';
-    progressBar.textContent = prediction + '%';
+    
+    let width = prediction;
+    if (width > 100) width = 100;
+    progressBar.style.width = width + '%';
+    progressBar.textContent = prediction.toFixed(1); 
+
+    document.querySelector('.status').textContent = statusText + ' — Take necessary precautions.';
 </script>
+
 
 </body>
 </html>
