@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fire Prediction Result</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #ff512f, #f09819);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box {
+            background: white;
+            padding: 45px;
+            border-radius: 16px;
+            text-align: center;
+            width: 450px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+            animation: popIn 0.7s ease-in-out;
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .icon {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            color: #e74c3c;
+        }
+
+        h2 {
+            margin: 20px 0;
+            font-size: 26px;
+            color: #2c3e50;
+        }
+
+        .status {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #555;
+        }
+
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 30px;
+            overflow: hidden;
+            height: 25px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            line-height: 25px;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 30px;
+            transition: width 1s ease;
+        }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            background: linear-gradient(to right, #e74c3c, #f39c12);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <div class="icon">🔥</div>
+    <h1>Fire Prediction Result</h1>
+
+    <h2>{{ prediction }}%</h2>
+
+    <div class="progress-container">
+        <div id="progressBar" class="progress-bar">0%</div>
+    </div>
+
+    <div class="status">
+        Stay alert and take preventive measures if risk is high.
+    </div>
+
+    <a href="/predict" class="btn">Predict Again</a>
+</div>
+
+<script>
+    const prediction = {{ prediction }}; // Pass numeric value from backend
+    const progressBar = document.getElementById('progressBar');
+
+    // Set bar color based on prediction percentage
+    let color = '#2ecc71'; // green for low risk
+    if (prediction >= 70) color = '#e74c3c'; // red for high risk
+    else if (prediction >= 40) color = '#f1c40f'; // yellow for medium risk
+
+    progressBar.style.backgroundColor = color;
+    progressBar.style.width = prediction + '%';
+    progressBar.textContent = prediction + '%';
+</script>
+
+</body>
+</html>

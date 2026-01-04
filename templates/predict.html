@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fire Prediction</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #ff512f, #f09819);
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 620px;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #e74c3c;
+        }
+
+        label {
+            font-weight: 600;
+            color: #444;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 6px 0 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #e67e22;
+            box-shadow: 0 0 5px rgba(230,126,34,0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(to right, #e74c3c, #f39c12);
+            color: white;
+            border: none;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🔥 Fire Prediction</h1>
+
+    <form method="post" action="{{ url_for('result') }}">
+
+        <label>Temperature</label>
+        <input type="number" name="Temperature" placeholder="Enter Temperature" required>
+
+        <label>RH (Relative Humidity)</label>
+        <input type="number" name="RH" placeholder="Enter RH" required>
+
+        <label>Ws (Wind Speed)</label>
+        <input type="number" name="Ws" placeholder="Enter Wind Speed" required>
+
+        <label>Rain</label>
+        <input type="number" name="Rain" placeholder="Enter Rainfall" required>
+
+        <label>FFMC</label>
+        <input type="number" name="FFMC" placeholder="Enter FFMC" required>
+
+        <label>DMC</label>
+        <input type="number" name="DMC" placeholder="Enter DMC" required>
+
+        <label>DC</label>
+        <input type="number" name="DC" placeholder="Enter DC" required>
+
+        <label>ISI</label>
+        <input type="number" name="ISI" placeholder="Enter ISI" required>
+
+        <label>Classes</label>
+        <input type="number" name="Classes" placeholder="Enter Class" required>
+
+        <label>Region</label>
+        <input type="number" name="Region" placeholder="Enter Region" required>
+
+        <button type="submit">Predict Fire Risk</button>
+    </form>
+</div>
+
+</body>
+</html>
