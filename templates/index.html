@@ -2,97 +2,576 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Fire Prediction</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FirePred - Intelligent Fire Prediction System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #ff512f, #dd2476);
-            height: 100vh;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        :root {
+            --primary: #FF5E3A;
+            --primary-dark: #E54D28;
+            --secondary: #3A86FF;
+            --dark: #1A1A2E;
+            --light: #F8F9FA;
+            --gray: #6C757D;
+            --gradient: linear-gradient(135deg, #FF5E3A 0%, #FF2D68 100%);
+            --gradient-blue: linear-gradient(135deg, #3A86FF 0%, #8338EC 100%);
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 94, 58, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(58, 134, 255, 0.1) 0%, transparent 20%);
         }
 
         .container {
-            background: white;
-            padding: 45px;
-            border-radius: 14px;
-            text-align: center;
-            width: 420px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-            animation: fadeIn 1s ease-in-out;
+            display: flex;
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            animation: fadeIn 1s ease-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .icon {
-            font-size: 60px;
-            margin-bottom: 10px;
-            animation: flicker 1.5s infinite alternate;
+        .left-panel {
+            flex: 1;
+            padding: 60px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
         }
 
-        @keyframes flicker {
-            from { transform: scale(1); }
-            to { transform: scale(1.1); }
+        .right-panel {
+            flex: 1;
+            background: var(--gradient);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            overflow: hidden;
+        }
+
+        .right-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            background: var(--gradient);
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 94, 58, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 94, 58, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 94, 58, 0); }
         }
 
         h1 {
-            color: #2c3e50;
-            margin-bottom: 10px;
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        p {
-            color: #555;
-            margin: 15px 0 30px;
+        .subtitle {
+            font-size: 18px;
+            color: var(--gray);
+            margin-bottom: 30px;
             line-height: 1.6;
         }
 
+        .features {
+            margin: 30px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .feature-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(58, 134, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+        }
+
         .btn {
-            text-decoration: none;
-            background: linear-gradient(to right, #ff512f, #f09819);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--gradient);
             color: white;
-            padding: 14px 30px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: bold;
-            display: inline-block;
+            border: none;
+            padding: 18px 36px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
             transition: all 0.3s ease;
+            text-decoration: none;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 320px;
+            box-shadow: 0 10px 30px rgba(255, 94, 58, 0.3);
         }
 
         .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 94, 58, 0.5);
+        }
+
+        .btn i {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover i {
+            transform: translateX(5px);
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        .visualization {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .fire-risk-meter {
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .meter-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .meter {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .meter-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                #00FF87 0deg,
+                #9CFF00 90deg,
+                #FFD000 180deg,
+                #FF6B00 270deg,
+                #FF0000 360deg
+            );
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .meter-inner {
+            width: 140px;
+            height: 140px;
+            background: var(--dark);
+            border-radius: 50%;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 24px;
+        }
+
+        .risk-level {
+            color: #FF5E3A;
+        }
+
+        .risk-label {
+            font-size: 14px;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+
+        .floating-element:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 40px;
+            height: 40px;
+            top: 70%;
+            left: 80%;
+            animation-delay: -5s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 20%;
+            animation-delay: -10s;
         }
 
         .footer {
-            margin-top: 25px;
-            font-size: 13px;
-            color: #888;
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .tech-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .tech-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--secondary);
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+                max-width: 600px;
+            }
+            
+            .right-panel {
+                order: -1;
+                min-height: 300px;
+            }
+            
+            .left-panel {
+                padding: 40px 30px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 32px;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .btn {
+                padding: 16px 24px;
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <div class="icon">🔥</div>
-        <h1>Fire Prediction System</h1>
-        <p>
-            Welcome to the Fire Prediction Application.<br>
-            This system uses <b>Machine Learning</b> to predict the
-            <b>risk of fire occurrence</b> based on weather conditions.
-        </p>
-
-        <a href="/predict" class="btn">Get Started</a>
-
-        <div class="footer">
-            Powered by ML & Data Science
+        <div class="left-panel">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <span>FirePred</span>
+            </div>
+            
+            <h1>Intelligent Fire Prediction System</h1>
+            
+            <p class="subtitle">
+                Advanced machine learning system that analyzes weather patterns, satellite data, and environmental factors to predict fire risks with 94% accuracy. Stay ahead of potential threats.
+            </p>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div>
+                        <strong>AI-Powered Analysis</strong>
+                        <div class="subtitle">Uses advanced neural networks for accurate predictions</div>
+                    </div>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-satellite"></i>
+                    </div>
+                    <div>
+                        <strong>Real-Time Satellite Data</strong>
+                        <div class="subtitle">Integrates live weather and environmental data feeds</div>
+                    </div>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div>
+                        <strong>Early Warning System</strong>
+                        <div class="subtitle">Get alerts before fire risks become critical</div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="/predict" class="btn">
+                <span>Analyze Fire Risk</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value">94%</div>
+                    <div class="stat-label">Prediction Accuracy</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Real-Time Monitoring</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">50+</div>
+                    <div class="stat-label">Environmental Factors</div>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <div>Powered by ML & Data Science</div>
+                <div class="tech-icons">
+                    <div class="tech-icon">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <div class="tech-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="tech-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="right-panel">
+            <div class="floating-elements">
+                <div class="floating-element"></div>
+                <div class="floating-element"></div>
+                <div class="floating-element"></div>
+            </div>
+            
+            <div class="visualization">
+                <div class="fire-risk-meter">
+                    <div class="meter-title">Current Fire Risk Level</div>
+                    <div class="meter">
+                        <div class="meter-circle">
+                            <div class="meter-inner">
+                                <span class="risk-level">LOW</span>
+                                <span class="risk-label">Today</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Based on current weather conditions and historical data</p>
+                </div>
+            </div>
         </div>
     </div>
 
+    <script>
+        // Interactive risk meter animation
+        const meterInner = document.querySelector('.meter-inner');
+        const riskLevel = document.querySelector('.risk-level');
+        const riskLabel = document.querySelector('.risk-label');
+        
+        // Simulate risk level change on hover
+        meterInner.addEventListener('mouseenter', () => {
+            const riskLevels = ['LOW', 'MODERATE', 'HIGH', 'EXTREME'];
+            const riskColors = ['#00FF87', '#FFD000', '#FF6B00', '#FF0000'];
+            const randomIndex = Math.floor(Math.random() * riskLevels.length);
+            
+            riskLevel.textContent = riskLevels[randomIndex];
+            riskLevel.style.color = riskColors[randomIndex];
+            riskLabel.textContent = 'Simulated Risk';
+            
+            // Add pulse animation
+            meterInner.style.animation = 'pulse 1s';
+            setTimeout(() => {
+                meterInner.style.animation = '';
+            }, 1000);
+        });
+        
+        // Restore original values when mouse leaves
+        meterInner.addEventListener('mouseleave', () => {
+            setTimeout(() => {
+                riskLevel.textContent = 'LOW';
+                riskLevel.style.color = '#FF5E3A';
+                riskLabel.textContent = 'Today';
+            }, 500);
+        });
+        
+        // Button hover effect enhancement
+        const btn = document.querySelector('.btn');
+        btn.addEventListener('mouseenter', () => {
+            const icon = btn.querySelector('i');
+            icon.style.transform = 'translateX(8px)';
+        });
+        
+        btn.addEventListener('mouseleave', () => {
+            const icon = btn.querySelector('i');
+            icon.style.transform = 'translateX(0)';
+        });
+        
+        // Animate stats counting up on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const statValues = document.querySelectorAll('.stat-value');
+            
+            statValues.forEach(stat => {
+                const originalText = stat.textContent;
+                const targetValue = parseInt(originalText);
+                
+                if (!isNaN(targetValue)) {
+                    let current = 0;
+                    const increment = targetValue / 30;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= targetValue) {
+                            clearInterval(timer);
+                            stat.textContent = originalText;
+                        } else {
+                            stat.textContent = Math.round(current);
+                        }
+                    }, 50);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

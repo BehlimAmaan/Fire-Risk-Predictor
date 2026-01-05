@@ -2,113 +2,483 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Fire Prediction</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FirePred - Risk Assessment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        :root {
+            --primary: #FF5E3A;
+            --primary-dark: #E54D28;
+            --secondary: #3A86FF;
+            --dark: #1A1A2E;
+            --light: #F8F9FA;
+            --gray: #6C757D;
+            --gradient: linear-gradient(135deg, #FF5E3A 0%, #FF2D68 100%);
+            --gradient-blue: linear-gradient(135deg, #3A86FF 0%, #8338EC 100%);
+        }
+
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #ff512f, #f09819);
-            padding: 40px;
+            background-color: var(--dark);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 94, 58, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(58, 134, 255, 0.1) 0%, transparent 20%);
         }
 
         .container {
-            max-width: 620px;
-            margin: auto;
-            background: white;
-            padding: 35px;
-            border-radius: 14px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            animation: fadeIn 0.8s ease-in-out;
+            max-width: 800px;
+            width: 100%;
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            animation: fadeIn 0.8s ease-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        h1 {
+        .header {
+            background: var(--gradient);
+            padding: 30px;
             text-align: center;
-            margin-bottom: 25px;
-            color: #e74c3c;
+            position: relative;
+            overflow: hidden;
         }
 
-        label {
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            font-size: 28px;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-icon {
+            background: rgba(26, 26, 46, 0.8);
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 94, 58, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 94, 58, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 94, 58, 0); }
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
             font-weight: 600;
-            color: #444;
+            margin-bottom: 8px;
+            color: var(--light);
+            font-size: 15px;
+        }
+
+        .input-wrapper {
+            position: relative;
         }
 
         input {
             width: 100%;
-            padding: 10px;
-            margin: 6px 0 15px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            transition: 0.3s;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--light);
+            font-size: 16px;
+            transition: all 0.3s ease;
         }
 
         input:focus {
             outline: none;
-            border-color: #e67e22;
-            box-shadow: 0 0 5px rgba(230,126,34,0.5);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 94, 58, 0.2);
+            background: rgba(255, 255, 255, 0.08);
         }
 
-        button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(to right, #e74c3c, #f39c12);
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--gradient);
             color: white;
             border: none;
-            font-size: 17px;
-            font-weight: bold;
+            padding: 18px 36px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 600;
             cursor: pointer;
-            border-radius: 30px;
-            transition: 0.3s;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(255, 94, 58, 0.3);
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 94, 58, 0.5);
+        }
+
+        .btn i {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover i {
+            transform: translateX(5px);
+        }
+
+        .info-note {
+            background: rgba(58, 134, 255, 0.1);
+            border-left: 4px solid var(--secondary);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 30px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--gray);
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Result Page Styles */
+        .result-container {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .result-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .risk-meter {
+            width: 250px;
+            height: 250px;
+            margin: 30px auto;
+            position: relative;
+        }
+
+        .meter-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                #00FF87 0deg,
+                #9CFF00 90deg,
+                #FFD000 180deg,
+                #FF6B00 270deg,
+                #FF0000 360deg
+            );
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .meter-inner {
+            width: 180px;
+            height: 180px;
+            background: var(--dark);
+            border-radius: 50%;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .risk-value {
+            font-size: 36px;
+            font-weight: 800;
+        }
+
+        .risk-label {
+            font-size: 18px;
+            margin-top: 5px;
+        }
+
+        .risk-details {
+            margin: 30px 0;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            text-align: left;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .recommendations {
+            text-align: left;
+            margin: 30px 0;
+        }
+
+        .recommendation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+        }
+
+        .rec-icon {
+            color: var(--primary);
+            font-size: 20px;
+            margin-top: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                max-width: 95%;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-container {
+                padding: 25px;
+            }
+            
+            .header {
+                padding: 25px 20px;
+            }
+            
+            h1 {
+                font-size: 26px;
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🔥 Fire Prediction</h1>
-
-    <form method="post" action="{{ url_for('result') }}">
-
-        <label>Temperature</label>
-        <input type="number" name="Temperature" placeholder="Enter Temperature" required>
-
-        <label>RH (Relative Humidity)</label>
-        <input type="number" name="RH" placeholder="Enter RH" required>
-
-        <label>Ws (Wind Speed)</label>
-        <input type="number" name="Ws" placeholder="Enter Wind Speed" required>
-
-        <label>Rain</label>
-        <input type="number" name="Rain" placeholder="Enter Rainfall" required>
-
-        <label>FFMC</label>
-        <input type="number" name="FFMC" placeholder="Enter FFMC" required>
-
-        <label>DMC</label>
-        <input type="number" name="DMC" placeholder="Enter DMC" required>
-
-        <label>DC</label>
-        <input type="number" name="DC" placeholder="Enter DC" required>
-
-        <label>ISI</label>
-        <input type="number" name="ISI" placeholder="Enter ISI" required>
-
-        <label>Classes</label>
-        <input type="number" name="Classes" placeholder="Enter Class" required>
-
-        <label>Region</label>
-        <input type="number" name="Region" placeholder="Enter Region" required>
-
-        <button type="submit">Predict Fire Risk</button>
-    </form>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-fire"></i>
+            </div>
+            <span>FirePred</span>
+        </div>
+        
+        <h1>Fire Risk Assessment</h1>
+        <p class="subtitle">Enter environmental parameters to analyze fire risk probability</p>
+    </div>
+    
+    <div class="form-container">
+        <form method="post" action="{{ url_for('result') }}">
+            <div class="form-row">
+                <div class="input-group">
+                    <label class="input-label">Temperature (°C)</label>
+                    <div class="input-wrapper">
+                        <input type="number" name="Temperature" placeholder="e.g., 25.5" step="0.1" required>
+                        <span class="input-icon"><i class="fas fa-thermometer-half"></i></span>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Relative Humidity (%)</label>
+                    <div class="input-wrapper">
+                        <input type="number" name="RH" placeholder="e.g., 45" min="0" max="100" required>
+                        <span class="input-icon"><i class="fas fa-tint"></i></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="input-group">
+                    <label class="input-label">Wind Speed (km/h)</label>
+                    <div class="input-wrapper">
+                        <input type="number" name="Ws" placeholder="e.g., 12.5" step="0.1" required>
+                        <span class="input-icon"><i class="fas fa-wind"></i></span>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Rainfall (mm)</label>
+                    <div class="input-wrapper">
+                        <input type="number" name="Rain" placeholder="e.g., 2.5" step="0.1" required>
+                        <span class="input-icon"><i class="fas fa-cloud-rain"></i></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="input-group">
+                    <label class="input-label">FFMC Index</label>
+                    <div class="input-wrapper">
+                        <input type="number" name="FFMC" placeholder="Fine Fuel Moisture Code" step="0.1" required>
+                        <span class="input-icon"><i class="fas fa-leaf"></i></span>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">DMC Index</label>
+                    <div class="input-wrapper">
+                        <input type="number" name="DMC" placeholder="Duff Moisture Code" step="0.1" required>
+                        <span class="input-icon"><i class="fas fa-layer-group"></i></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="input-group">
+                    <label class="input-label">DC Index</label>
+                    <div class="input-wrapper">
+                        <input type="number" name="DC" placeholder="Drought Code" step="0.1" required>
+                        <span class="input-icon"><i class="fas fa-sun"></i></span>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">ISI Index</label>
+                    <div class="input-wrapper">
+                        <input type="number" name="ISI" placeholder="Initial Spread Index" step="0.1" required>
+                        <span class="input-icon"><i class="fas fa-fire"></i></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="input-group">
+                    <label class="input-label">Fire Classes</label>
+                    <div class="input-wrapper">
+                        <input type="number" name="Classes" placeholder="0-6" min="0" max="6" required>
+                        <span class="input-icon"><i class="fas fa-list-ol"></i></span>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Region Code</label>
+                    <div class="input-wrapper">
+                        <input type="number" name="Region" placeholder="1-7" min="1" max="7" required>
+                        <span class="input-icon"><i class="fas fa-map-marker-alt"></i></span>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn">
+                <span>Analyze Fire Risk</span>
+                <i class="fas fa-chart-line"></i>
+            </button>
+        </form>
+        
+        <div class="info-note">
+            <i class="fas fa-info-circle"></i> All fields are required. Input values are analyzed using our machine learning model to predict fire risk probability.
+        </div>
+        
+        <div class="footer">
+            Powered by ML & Data Science | FirePred v2.1
+        </div>
+    </div>
 </div>
 
 </body>

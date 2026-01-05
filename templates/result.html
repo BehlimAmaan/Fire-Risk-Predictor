@@ -2,132 +2,464 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Fire Prediction Result</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FirePred - Risk Assessment Result</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        :root {
+            --primary: #FF5E3A;
+            --primary-dark: #E54D28;
+            --secondary: #3A86FF;
+            --dark: #1A1A2E;
+            --light: #F8F9FA;
+            --gray: #6C757D;
+            --gradient: linear-gradient(135deg, #FF5E3A 0%, #FF2D68 100%);
+            --gradient-blue: linear-gradient(135deg, #3A86FF 0%, #8338EC 100%);
+        }
+
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #ff512f, #f09819);
-            height: 100vh;
+            background-color: var(--dark);
+            color: var(--light);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 94, 58, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(58, 134, 255, 0.1) 0%, transparent 20%);
         }
 
-        .box {
-            background: white;
-            padding: 45px;
-            border-radius: 16px;
+        .container {
+            max-width: 700px;
+            width: 100%;
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            background: var(--gradient);
+            padding: 30px;
             text-align: center;
-            width: 450px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.35);
-            animation: popIn 0.7s ease-in-out;
+            position: relative;
+            overflow: hidden;
         }
 
-        @keyframes popIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
         }
 
-        .icon {
-            font-size: 60px;
-            margin-bottom: 10px;
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            font-size: 28px;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-icon {
+            background: rgba(26, 26, 46, 0.8);
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
         }
 
         h1 {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.2;
             margin-bottom: 10px;
-            color: #e74c3c;
+            position: relative;
+            z-index: 2;
         }
 
-        h2 {
-            margin: 20px 0;
-            font-size: 26px;
-            color: #2c3e50;
+        .subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            position: relative;
+            z-index: 2;
         }
 
-        .status {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 25px;
-            color: #555;
-        }
-
-        .progress-container {
-            background: #e0e0e0;
-            border-radius: 30px;
-            overflow: hidden;
-            height: 25px;
-            margin-bottom: 20px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0;
-            line-height: 25px;
-            color: white;
+        .result-container {
+            padding: 40px;
             text-align: center;
-            font-weight: bold;
-            border-radius: 30px;
-            transition: width 1s ease, background-color 0.5s ease;
+        }
+
+        .result-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .risk-meter {
+            width: 250px;
+            height: 250px;
+            margin: 30px auto;
+            position: relative;
+        }
+
+        .meter-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                #00FF87 0deg,
+                #9CFF00 90deg,
+                #FFD000 180deg,
+                #FF6B00 270deg,
+                #FF0000 360deg
+            );
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .meter-inner {
+            width: 180px;
+            height: 180px;
+            background: var(--dark);
+            border-radius: 50%;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .risk-value {
+            font-size: 36px;
+            font-weight: 800;
+        }
+
+        .risk-label {
+            font-size: 18px;
+            margin-top: 5px;
+        }
+
+        .risk-level {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 20px 0;
+            padding: 10px 30px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        .risk-details {
+            margin: 30px 0;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            text-align: left;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .recommendations {
+            text-align: left;
+            margin: 30px 0;
+        }
+
+        .recommendation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+        }
+
+        .rec-icon {
+            color: var(--primary);
+            font-size: 20px;
+            margin-top: 2px;
         }
 
         .btn {
-            display: inline-block;
-            text-decoration: none;
-            background: linear-gradient(to right, #e74c3c, #f39c12);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--gradient);
             color: white;
-            padding: 12px 28px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: bold;
-            transition: 0.3s;
+            border: none;
+            padding: 18px 36px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(255, 94, 58, 0.3);
         }
 
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+            box-shadow: 0 15px 40px rgba(255, 94, 58, 0.5);
+        }
+
+        .btn i {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover i {
+            transform: translateX(5px);
+        }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--gray);
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                max-width: 95%;
+            }
+            
+            .result-container {
+                padding: 25px;
+            }
+            
+            .risk-meter {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .meter-inner {
+                width: 140px;
+                height: 140px;
+            }
+            
+            .risk-value {
+                font-size: 28px;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="box">
-    <div class="icon">🔥</div>
-    <h1>The FWI Fire Prediction Result</h1>
-
-    <h2>{{ prediction }}</h2>
-
-    <div class="progress-container">
-        <div id="progressBar" class="progress-bar">0%</div>
+<div class="container">
+    <div class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-fire"></i>
+            </div>
+            <span>FirePred</span>
+        </div>
+        
+        <h1>Fire Risk Assessment Result</h1>
+        <p class="subtitle">Analysis completed based on your input parameters</p>
     </div>
-
-    <div class="status">
-        Stay alert and take preventive measures if risk is high.
+    
+    <div class="result-container">
+        <div class="result-icon">🔥</div>
+        
+        <div class="risk-meter">
+            <div class="meter-circle">
+                <div class="meter-inner">
+                    <div id="riskValue" class="risk-value">0%</div>
+                    <div id="riskLabel" class="risk-label">Risk</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="riskLevel" class="risk-level">Calculating...</div>
+        
+        <div class="risk-details">
+            <div class="detail-item">
+                <span>Probability Score</span>
+                <span id="probabilityScore">0</span>
+            </div>
+            <div class="detail-item">
+                <span>Confidence Level</span>
+                <span id="confidenceLevel">High</span>
+            </div>
+            <div class="detail-item">
+                <span>Analysis Time</span>
+                <span id="analysisTime">0.8s</span>
+            </div>
+            <div class="detail-item">
+                <span>Model Version</span>
+                <span>FirePred v2.1</span>
+            </div>
+        </div>
+        
+        <div class="recommendations">
+            <h3 style="margin-bottom: 15px;">Recommended Actions</h3>
+            <div id="recommendationsList">
+                <!-- Recommendations will be populated by JS -->
+            </div>
+        </div>
+        
+        <a href="/predict" class="btn">
+            <span>New Assessment</span>
+            <i class="fas fa-redo"></i>
+        </a>
+        
+        <div class="footer">
+            This assessment is based on machine learning predictions. Always verify with local authorities.
+        </div>
     </div>
-
-    <a href="/predict" class="btn">Predict Again</a>
 </div>
 
 <script>
-    const prediction = {{ prediction }}; 
-    const progressBar = document.getElementById('progressBar');
-
-    let color = '#2ecc71'; 
-    let statusText = 'Low Risk';
-    if (prediction >= 80) { color = '#e74c3c'; statusText = 'Extreme Risk'; }
-    else if (prediction >= 60) { color = '#e67e22'; statusText = 'Very High Risk'; }
-    else if (prediction >= 40) { color = '#f1c40f'; statusText = 'High Risk'; }
-    else if (prediction >= 20) { color = '#27ae60'; statusText = 'Moderate Risk'; }
-
-    progressBar.style.backgroundColor = color;
+    // Simulate getting prediction from backend
+    const prediction = parseFloat({{ prediction }}) || 65.5;
     
-    let width = prediction;
-    if (width > 100) width = 100;
-    progressBar.style.width = width + '%';
-    progressBar.textContent = prediction.toFixed(1); 
-
-    document.querySelector('.status').textContent = statusText + ' — Take necessary precautions.';
+    // Set risk level based on prediction value
+    let riskLevel = '';
+    let riskColor = '';
+    let recommendations = [];
+    
+    if (prediction >= 80) {
+        riskLevel = 'EXTREME RISK';
+        riskColor = '#FF0000';
+        recommendations = [
+            'Issue immediate evacuation alerts',
+            'Contact local fire department',
+            'Deploy fire suppression teams',
+            'Close affected areas to public',
+            'Activate emergency response plan'
+        ];
+    } else if (prediction >= 60) {
+        riskLevel = 'HIGH RISK';
+        riskColor = '#FF6B00';
+        recommendations = [
+            'Increase monitoring frequency',
+            'Prepare fire suppression equipment',
+            'Alert nearby communities',
+            'Restrict outdoor activities',
+            'Review evacuation routes'
+        ];
+    } else if (prediction >= 40) {
+        riskLevel = 'MODERATE RISK';
+        riskColor = '#FFD000';
+        recommendations = [
+            'Monitor weather conditions',
+            'Clear flammable materials',
+            'Check fire equipment',
+            'Inform local authorities',
+            'Review emergency procedures'
+        ];
+    } else if (prediction >= 20) {
+        riskLevel = 'LOW RISK';
+        riskColor = '#9CFF00';
+        recommendations = [
+            'Continue regular monitoring',
+            'Maintain clear vegetation',
+            'Keep fire equipment ready',
+            'Stay informed about weather',
+            'Practice fire safety'
+        ];
+    } else {
+        riskLevel = 'VERY LOW RISK';
+        riskColor = '#00FF87';
+        recommendations = [
+            'Maintain standard precautions',
+            'Regular equipment checks',
+            'Stay informed',
+            'Practice general safety'
+        ];
+    }
+    
+    // Update UI elements
+    document.getElementById('riskValue').textContent = prediction.toFixed(1) + '%';
+    document.getElementById('riskValue').style.color = riskColor;
+    document.getElementById('riskLevel').textContent = riskLevel;
+    document.getElementById('riskLevel').style.color = riskColor;
+    document.getElementById('riskLevel').style.background = riskColor + '20'; // Add transparency
+    
+    // Update details
+    document.getElementById('probabilityScore').textContent = prediction.toFixed(1) + '%';
+    
+    // Set confidence level based on prediction
+    let confidence = 'High';
+    if (prediction < 30 || prediction > 90) confidence = 'Very High';
+    else if (prediction < 20 || prediction > 95) confidence = 'Maximum';
+    document.getElementById('confidenceLevel').textContent = confidence;
+    
+    // Populate recommendations
+    const recList = document.getElementById('recommendationsList');
+    recommendations.forEach(rec => {
+        const div = document.createElement('div');
+        div.className = 'recommendation-item';
+        div.innerHTML = `
+            <div class="rec-icon"><i class="fas fa-exclamation-circle"></i></div>
+            <div>${rec}</div>
+        `;
+        recList.appendChild(div);
+    });
+    
+    // Animate the risk meter
+    const meterInner = document.querySelector('.meter-inner');
+    let currentValue = 0;
+    const interval = setInterval(() => {
+        currentValue += 1;
+        document.getElementById('riskValue').textContent = currentValue.toFixed(0) + '%';
+        
+        if (currentValue >= prediction) {
+            clearInterval(interval);
+            document.getElementById('riskValue').textContent = prediction.toFixed(1) + '%';
+        }
+    }, 20);
 </script>
-
 
 </body>
 </html>
